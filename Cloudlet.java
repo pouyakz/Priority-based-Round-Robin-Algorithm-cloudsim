@@ -30,16 +30,6 @@ public class Cloudlet {
 	 * CloudResource returns to it after the execution.
 	 **/
 	private int priority;
-	
-	private int pr;
-    
-    public void setPr(int pr) {
-        this.pr = pr;
-    }
-
-    public int getPr() {
-    return pr;
-    }
 
 	private int userId;
 
