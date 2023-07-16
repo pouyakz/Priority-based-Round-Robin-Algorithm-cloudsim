@@ -66,13 +66,7 @@ public class Senario2 {
 		
 		for(int i=0;i<vms;i++){
             int mips=(int)(Math.random()*4+1);
-//            PeProvisionerSimple peProvisioner = new PeProvisionerSimple(1000);
-//            BwProvisionerSimple bwProvisioner = new BwProvisionerSimple(2000);
-			//vm[i] = new Vm(i, userId, 250*mips, pesNumber, ram, bw, size, vmm, new CloudletSchedulerTimeShared());
 			vm[i] = new Vm(i, userId, 200*mips, pesNumber, ram, bw, size, vmm, new CloudletSchedulerSpaceShared());
-			//vm[i] = Vm(i, userId, mips, pesNumber, ram, bw, size, priority, vmm, new CloudletSchedulerSpaceShared());
-//			int thresholdRam = (int) (512 * 0.9);
-//			RamProvisionerSimple ramProvisioner = new RamProvisionerSimple(thresholdRam);// Set the RAM utilization threshold to 90%
 			list.add(vm[i]);
 		}
 		
@@ -143,67 +137,22 @@ public class Senario2 {
 			//Fourth step: Create VMs and Cloudlets and send them to broker
 			vmlist = createVM(brokerId,4); //creating vms
 			cloudletList = createCloudlet(brokerId,36); // creating cloudlets            
-                        
-//                        int random;
-                        //assigning a random priority to tasks
-//                        for(int i=0;i<36;i++){
-//                        
-//                        random=(int)(Math.random() * 4) + 1;
-//                        cloudletList.get(i).setPr(random);
-//                        }
-			LinkedList<Cloudlet> list1 = new LinkedList<Cloudlet>();
-			LinkedList<Cloudlet> list2 = new LinkedList<Cloudlet>();
-			LinkedList<Cloudlet> list3 = new LinkedList<Cloudlet>();
-			LinkedList<Cloudlet> list4 = new LinkedList<Cloudlet>();
-			LinkedList<Cloudlet> listT = new LinkedList<Cloudlet>();
-                        List<Integer> pr1=new ArrayList<Integer>();  
-                        List<Integer> pr2=new ArrayList<Integer>(); 
-                        List<Integer> pr3=new ArrayList<Integer>(); 
-                        List<Integer> pr4=new ArrayList<Integer>();
-                        List<Integer> prTotal=new ArrayList<Integer>(); 
-                        for( int i=0; i<36; i++) {
-                        	
-                        	if (cloudletList.get(i).getPriority()== 1) {
-                        		list1.add(cloudletList.get(i));
-                        		System.out.println("@@PR1: " + i);
-                        	}
-                        	else if (cloudletList.get(i).getPr() == 2) {
-                        		list2.add(cloudletList.get(i));
-                        		
-                        	}
-                        	else if (cloudletList.get(i).getPr() == 3) {
-                        		list3.add(cloudletList.get(i));
-                        		
-                        	}
-                        	else {
-                        		list4.add(cloudletList.get(i));
-                        		
-                        	}
-                        }
-                        
-                        prTotal.addAll(pr1);
-                        prTotal.addAll(pr2);
-                        prTotal.addAll(pr3);
-                        prTotal.addAll(pr4);
-                        listT.addAll(list1);
-                        listT.addAll(list2);
-                        listT.addAll(list3);
-                        listT.addAll(list4);
-                        for (int i = 0 ; i < listT.size() ; i++) {
-            				for (int j = i+1 ; j < listT.size(); j++) {
-            					Cloudlet c = listT.get(i);
-            					Cloudlet next = listT.get(j);
+  
+                        for (int i = 0 ; i < cloudletList.size() ; i++) {
+            				for (int j = i+1 ; j < cloudletList.size(); j++) {
+            					Cloudlet c = cloudletList.get(i);
+            					Cloudlet next = cloudletList.get(j);
             					if (c.getPriority() > next.getPriority()) {
             						Cloudlet temp = c;
-            						listT.set(i, next);
-            						listT.set(j, temp);
+            						cloudletList.set(i, next);
+            						cloudletList.set(j, temp);
             					}
             				}
             			}
                         
              
 			broker.submitVmList(vmlist);
-            broker.submitCloudletList(listT);
+            broker.submitCloudletList(cloudletList);
 
 			
 
@@ -215,21 +164,21 @@ public class Senario2 {
                             
 
                                     if(tm[0]==0){
-                                        broker.bindCloudletToVm(listT.get(j).getCloudletId(), 0);
+                                        broker.bindCloudletToVm(cloudletList.get(j).getCloudletId(), 0);
                                         tm[0]=1;  
                                     }
                                         
                                     else if(tm[1]==0){
-                                        broker.bindCloudletToVm(listT.get(j).getCloudletId(), 1);
+                                        broker.bindCloudletToVm(cloudletList.get(j).getCloudletId(), 1);
                                         tm[1]=1;
                                     }
                                         
                                     else if(tm[2]==0){
-                                        broker.bindCloudletToVm(listT.get(j).getCloudletId(), 2);
+                                        broker.bindCloudletToVm(cloudletList.get(j).getCloudletId(), 2);
                                         tm[2]=1;
                                     }
                                     else if(tm[3]==0){
-                                        broker.bindCloudletToVm(listT.get(j).getCloudletId(), 3);
+                                        broker.bindCloudletToVm(cloudletList.get(j).getCloudletId(), 3);
                                         tm[3]=1;
                                     }
                                     else{
@@ -237,7 +186,7 @@ public class Senario2 {
                                         tm[1]=0;
                                         tm[2]=0;
                                         tm[3]=0;
-                                        broker.bindCloudletToVm(listT.get(j).getCloudletId(), 0);
+                                        broker.bindCloudletToVm(cloudletList.get(j).getCloudletId(), 0);
                                         tm[0]=1;                                        
                                     }
 
